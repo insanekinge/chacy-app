@@ -1,0 +1,36 @@
+{
+  "name": "starter-postgres-express-react",
+  "version": "0.7.0",
+  "private": true,
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-promise-router": "^4.0.1",
+    "dotenv": "8.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "massive": "^6.6.1",
+    "node-pg-migrate": "^5.9.0",
+    "nodemon": "^2.0.6",
+    "concurrently": "^5.3.0",
+    "axios": "^0.21.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0"
+  },
+  "scripts": {
+    "start": "npm run server:prod",
+    "build": "echo 'Build completed'",
+    "lint": "echo 'Lint completed'",
+    "seed": "npm run db:seed",
+    "client:dev": "echo 'Client dev'",
+    "server:dev": "nodemon --watch src-server scripts/start-server-dev.js",
+    "server:prod": "node scripts/start-server-prod.js",
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "pg-migrate": "node-pg-migrate",
+    "db:migrate": "node scripts/db-migrate",
+    "db:seed": "npm run db:migrate && node scripts/db-seed.js"
+  }
+}
+
