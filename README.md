@@ -1,4 +1,4 @@
-# Starter Full-Stack JS Project: Postgres + Express + React + Node (PERN)
+# CHACY APP STARTER
 
 ## Overview
 
