@@ -133,5 +133,3 @@ PORT=5000                                 # порт бэкенда
 - Webpack 4.44.2, webpack-dev-server 3.11.0
 - Babel 7, ESLint (airbnb)
 - Express 4.17.1, Massive 6.6.1, pg 8.11.3, node-pg-migrate 5.9.0
-
-Приятной разработки! ✨
