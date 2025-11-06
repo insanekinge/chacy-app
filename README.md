@@ -1,163 +1,137 @@
-# CHACY APP STARTER
+# CHACY APP 🚀
 
-## Overview
+Современный стартовый шаблон: React (CRA ejected) + Express + PostgreSQL. Готов для локального запуска и разработки.
 
-The frontend was added from a bootstrapped React project [Create React App](https://github.com/facebookincubator/create-react-app), then ejected and customized.
-The backend was added from a bootstrapped Express project [Express Generator](https://expressjs.com/en/starter/generator.html)
+### Что внутри
+- **Фронтенд**: React 17 + Webpack 4 + Babel 7
+- **Бэкенд**: Express 4
+- **БД**: PostgreSQL + Massive.js + node-pg-migrate
+- **Dev-серверы**: клиент `:3000` → прокси на сервер `:5000`
 
-## Folder Structure
+---
 
-After creation, your project should look like this:
+## ⚙️ Рекомендуемые версии/конфиги
+- **Node.js**: 16.20.x (LTS). Новее 18 может ломать сборку Webpack 4 (OpenSSL).
+- **npm**: 8.x
+- **PostgreSQL**: 13+ (локально или через контейнер)
+- **Ключ пакетов** (из `package.json`):
+  - React 17.0.1, React DOM 17.0.1
+  - Express 4.17.1
+  - Webpack 4.44.2, webpack-dev-server 3.11.0
+  - node-pg-migrate 5.9.0, pg 8.11.3
+  - axios, passport, jsonwebtoken и др.
 
+Если используете Node ⩾ 17, может понадобиться `setx NODE_OPTIONS "--openssl-legacy-provider"`.
+
+---
+
+## 🗂️ Структура проекта
 ```
-app/
-  config/
-  migrations/
-  scripts/
-  src-client/
-  src-server/
-  package.json
-  README.md
-  .env.example
-```
-
-
-
-## Prerequisites
-Before installing, please make sure to have global installations of
-* [node v8 or higher](https://nodejs.org/en/download/)
-* npm v5 or higher
-* [PostgreSQL](https://www.postgresql.org/download/) (if running a local DB instance)
-
-## Installation
-1. Execute `npm install` to configure the local environment.
-2. Create `.env` file and define environmental variables (see `.env.example` for example)
-3. Perform DB initialization/migration and seeding `npm run seed`
-4. Start the development server `npm run dev`
-5. Build the production version `npm run build`
-
-
-## Usage
-This application uses npm scripts for testing, development, and deployment.
-Note that the pre-commit hook runs the build script which compiles FE and lints BE code.
-
-### Primary
-* `$ npm run start`: run the production version of the app
-* `$ npm run build`: build the production bundle of the FE app (linting is automatically executed), and perform linting of the BE code
-* `$ npm run lint`: perform linting of the BE code
-* `$ npm run seed`: perform DB initialization/migration and seeding
-* `$ npm run dev`: run the development version of the app
-* `$ npm run test:client`: run FE tests using Jest
-* `$ npm run test:server`: run BE tests using Jest
-
-### Secondary
-* `$ npm run client:dev`: run Webpack dev server for FE development
-* `$ npm run server:dev`: run the development version of BE
-* `$ npm run server:prod`: alias of `start`
-* `$ npm run pg-migrate`: alias of `node-pg-migrate` module
-* `$ npm run db:migrate`: run DB migration scripts
-* `$ npm run db:seed`: alias of `seed`
-
-## Authentication Endpoints (/auth/*)
-This project uses JWT for authentication.
-
-### `POST /auth/login`: Authenticate User
-This endpoint authenticates a user. An example of the payload (input data) is provided below:
-```
-body: {
-    email   : String,  /* required */
-    password: String,  /* required */
-}
-```
-The output returns JWT token and user object:
-```
-let response = {
-    statusCode: 200,
-    body: {
-        token  : String,
-        user   : Object,
-    }
-}
+config/           # Webpack, devServer, env, db, secrets
+migrations/       # SQL-модули node-pg-migrate
+scripts/          # Скрипты запуска/сборки/миграций/сидирования
+src-client/       # Фронтенд (React)
+src-server/       # Бэкенд (Express)
+package.json
+README.md
+.env.example      # Образец переменных окружения
 ```
 
-### `POST /auth/register`: Register New User
-This endpoint registers a new user. An example of the payload (input data) is provided below:
-```
-body: {
-    email    : String,    /* required */
-    firstName: String,    /* required */
-    lastName : String,    /* required */
-    password : String,    /* required */
-}
-```
-The output is the same as from `POST /auth/login`
+---
 
-### `GET /auth/me`: Get Current User
-This endpoint returns the User object associated with the currently authenticated user. No input data is required
-The output is provided is an object with the following structure:
+## ✅ Предусловия
+- Установите Node.js 16.20.x и npm 8.x
+  - Windows (рекомендовано): nvm-windows (`nvm install 16.20.2 && nvm use 16.20.2`)
+- Установите PostgreSQL 13+ и создайте БД
+
+---
+
+## 🔐 Переменные окружения (.env)
+Скопируйте `.env.example` в `.env` и заполните:
+
 ```
-let response = {
-    statusCode: 200,
-    body: {
-        id       : Number,
-        email    : String,
-        firstName: String,
-        lastName : String,
-        createdAt: Date,
-    }
-}
+DATABASE_URL=                             # (опционально) полная строка подключения, перекрывает DB_*
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=chacy
+DB_ENABLE_SSL=
+JWT_SECRET=please_change_me
+PORT=5000                                 # порт бэкенда
 ```
 
-### Seed data (sample user)
-```
-Email: user@test.com
-Password: password
-```
-## API Endpoints (/api/*)
+Бэкенд читает эти значения через `config/db.js` и `config/secrets.js`.
 
-### `POST /api/posts`: Create a New Post
-This endpoint creates a new Post with current user as author. An example of the payload (input data) is provided below:
-```
-body: {
-    content: Text,      /* required */
-    title  : String     /* required */
-}
-```
-The output echos back the provided data with the system-generated record ID:
-```
-let response = {
-    statusCode: 200,
-    body: {
-        id     : Number,
-        content: Text,
-        title  : String,
-        user_id: Number,
-    }
-}
-```
+---
 
-### `GET /api/posts`: Get all Posts
-This endpoint returns the complete set of available Posts. No input data is required
-The output is provided in array with each object having the structure described above:
-```
-let response = {
-    statusCode: 200,
-    body: [
-            Post1,
-            Post2,
-            ...
-            PostN
-        ]
-    }
-```
+## ▶️ Локальный запуск (DEV)
+1. Установить зависимости
+   - Windows PowerShell с ограничениями выполнения может блокировать `npm`.
+     Если видите ошибку про ExecutionPolicy, запустите PowerShell от Админа:
+     - `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`
+     - или используйте CMD: откройте `cmd.exe` → `cd D:\chacy-app` → `npm ci`
 
-### `GET /api/posts/:id`: Get a Post by ID
-This endpoint returns an individual Post by ID. The ID is provided as a URI parameter.
-The output is the same as from `POST /api/posts`
+   Команды установки:
+   - `npm ci`  (предпочтительно, так как есть `package-lock.json`)
+   - либо `npm install`
 
-### `PUT /api/posts/:id`: Update a Post by ID
-This endpoint updates an existing Post by ID. The input/output formats are the same as in `POST /api/posts`
+2. Подготовить БД
+   - Убедитесь, что PostgreSQL запущен и доступен по `.env`
+   - `npm run seed` (выполнит миграции и засидит тестовые данные)
 
-### `DELETE /api/posts/:id`: Delete a Post by ID
-This endpoint deletes an individual Post by ID. The ID is provided as a URI parameter.
-# chacy-app
+3. Запуск дев-среды (клиент + сервер) 🟢
+   - `npm run dev`
+   - Клиент: `http://localhost:3000` → прокси на API `http://localhost:5000`
+
+4. Продакшн-сборка
+   - `npm run build` (сборка клиента + линт)
+   - `npm start` (запуск сервера на `:5000`)
+
+---
+
+## 📜 Скрипты
+- **Основные**
+  - `npm run start` — сервер в prod-режиме
+  - `npm run build` — сборка FE (и линт BE)
+  - `npm run lint` — линт FE и BE
+  - `npm run seed` — миграции + сиды (пользователь `user@test.com` / `password`)
+  - `npm run dev` — параллельный запуск клиента и сервера
+  - `npm run test:client` — тесты клиента (Jest)
+  - `npm run test:server` — тесты сервера (Jest)
+
+- **Вспомогательные**
+  - `npm run client:dev` — Webpack dev server (порт 3000)
+  - `npm run server:dev` — Express с `nodemon` (порт 5000)
+  - `npm run server:prod` — запуск прод-сервера
+  - `npm run db:migrate` — выполнение миграций (node-pg-migrate)
+  - `npm run pg-migrate` — прямой вызов node-pg-migrate
+
+---
+
+## 🔌 API и Аутентификация
+- JWT авторизация (см. `config/secrets.js` → `JWT_SECRET`)
+- Базовые эндпоинты: `src-server/routes/*` и `src-server/components/*`
+- Прокси: фронтенд (`package.json` → `proxy: http://localhost:5000`)
+
+Пример тестового пользователя: `user@test.com` / `password` ✅
+
+---
+
+## 🧰 Troubleshooting (Windows)
+- ❌ PowerShell запрещает выполнение `npm.ps1`:
+  - Откройте PowerShell от Админа → `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`
+  - Либо используйте CMD для запуска команд `npm`
+- ❌ Ошибки OpenSSL/webpack на новых Node:
+  - Используйте Node 16.20.x или
+  - `setx NODE_OPTIONS "--openssl-legacy-provider"` (перезапустите терминал)
+
+---
+
+## 📦 Стек и версии (снято из repo)
+- React 17.0.1, react-router-dom 5.2.0
+- Webpack 4.44.2, webpack-dev-server 3.11.0
+- Babel 7, ESLint (airbnb)
+- Express 4.17.1, Massive 6.6.1, pg 8.11.3, node-pg-migrate 5.9.0
+
+Приятной разработки! ✨
