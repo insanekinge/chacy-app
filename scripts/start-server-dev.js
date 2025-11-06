@@ -2,6 +2,10 @@
 const http = require('http');
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+// Default to running without a real DB in development unless explicitly disabled
+if (typeof process.env.DISABLE_DB === 'undefined') {
+  process.env.DISABLE_DB = 'true';
+}
 require('../config/env');
 const App = require('../src-server/app');
 

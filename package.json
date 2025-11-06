@@ -83,17 +83,19 @@
     "webpack": "4.44.2",
     "webpack-dev-server": "3.11.0",
     "webpack-manifest-plugin": "2.2.0",
-    "workbox-webpack-plugin": "5.1.4"
+    "workbox-webpack-plugin": "5.1.4",
+    "sass": "^1.69.0"
   },
   "scripts": {
     "start": "npm run server:prod",
     "build": "node scripts/build.js && npm run lint",
+    "build:extension": "node scripts/build-extension.js",
     "lint": "eslint 'src-client/**/*.{js,jsx}' 'src-server/**/*.js'",
     "seed": "npm run db:seed",
     "client:dev": "node scripts/start-client-dev.js",
     "server:dev": "nodemon --watch src-server scripts/start-server-dev.js",
     "server:prod": "node scripts/start-server-prod.js",
-    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "dev": "node scripts/dev.js",
     "pg-migrate": "node-pg-migrate",
     "db:migrate": "node scripts/db-migrate",
     "db:seed": "npm run db:migrate && node scripts/db-seed.js",
@@ -109,6 +111,10 @@
   },
   "devDependencies": {
     "husky": "^4.3.0"
+  },
+  "engines": {
+    "node": ">=16.20.0 <17",
+    "npm": ">=8 <9"
   },
   "browserslist": {
     "production": [

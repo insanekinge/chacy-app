@@ -5,6 +5,11 @@ const _ = require('lodash');
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 require('../config/env');
 
+if (String(process.env.DISABLE_DB).toLowerCase() === 'true') {
+  console.log('DB is disabled (DISABLE_DB=true). Skipping seed.');
+  if (require.main === module) process.exit(0);
+}
+
 const DB = require('../src-server/db');
 const auth = require('../src-server/components/auth/helpers');
 

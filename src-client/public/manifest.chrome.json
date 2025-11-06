@@ -2,7 +2,6 @@
   "manifest_version": 3,
   "name": "Chacy App",
   "version": "0.7.0",
-  "description": "Trading helper app as a browser extension.",
   "action": {
     "default_title": "Chacy",
     "default_popup": "index.html"
@@ -14,3 +13,5 @@
     "128": "favicon.ico"
   }
 }
+
+

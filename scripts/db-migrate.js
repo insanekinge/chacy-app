@@ -4,6 +4,11 @@ const migrate = require('node-pg-migrate');
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 require('../config/env');
 
+if (String(process.env.DISABLE_DB).toLowerCase() === 'true') {
+  console.log('DB is disabled (DISABLE_DB=true). Skipping migrations.');
+  if (require.main === module) process.exit(0);
+}
+
 const { connectionStr, schema } = require('../config/db');
 
 const databaseUrl = connectionStr;
